@@ -1,34 +1,37 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "kenneth-ngugi-portfolio",
-  "main": ".open-next/worker.js",
-  "compatibility_date": "2025-09-01",
-  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
-
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS"
-  },
-
-  // Required by OpenNext so the Worker can call itself (ISR revalidation).
-  "services": [
-    { "binding": "WORKER_SELF_REFERENCE", "service": "kenneth-ngugi-portfolio" }
-  ],
-
-  // ISR cache. Create once with:
-  //   npx wrangler r2 bucket create kenneth-portfolio-cache
-  "r2_buckets": [
-    {
-      "binding": "NEXT_INC_CACHE_R2_BUCKET",
-      "bucket_name": "kenneth-portfolio-cache"
-    }
-  ],
-
-  // Uncomment once ngugi.co.ke is a zone on your Cloudflare account.
-  // "routes": [
-  //   { "pattern": "ngugi.co.ke", "custom_domain": true },
-  //   { "pattern": "www.ngugi.co.ke", "custom_domain": true }
-  // ],
-
-  "observability": { "enabled": true }
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "kenneth-ngugi-portfolio",
+	"main": ".open-next/worker.js",
+	"compatibility_date": "2025-09-01",
+	"compatibility_flags": [
+		"nodejs_compat",
+		"global_fetch_strictly_public"
+	],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	// Required by OpenNext so the Worker can call itself (ISR revalidation).
+	"services": [
+		{
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "kenneth-ngugi-portfolio"
+		}
+	],
+	// ISR cache. Create once with:
+	//   npx wrangler r2 bucket create kenneth-portfolio-cache
+	"kv_namespaces": [
+		{
+			"binding": "NEXT_INC_CACHE_KV",
+			"id": "5d96cf3b42484e9faa04203f0f305721"
+		}
+	],
+	// Uncomment once ngugi.co.ke is a zone on your Cloudflare account.
+	// "routes": [
+	//   { "pattern": "ngugi.co.ke", "custom_domain": true },
+	//   { "pattern": "www.ngugi.co.ke", "custom_domain": true }
+	// ],
+	"observability": {
+		"enabled": true
+	}
 }
