@@ -21,22 +21,8 @@ const BLUR_FADE_DELAY = 0.04;
 export const revalidate = 3600;
 
 export default async function Page() {
-  // Calls the data layer directly instead of making an HTTP request to our
-  // own /api/portfolio route. The previous approach (via
-  // getServerPortfolioData in server-portfolio.ts) called next/headers()
-  // to build a self-referential fetch URL, which had two costs: it forced
-  // this entire page out of static/ISR rendering into fully dynamic
-  // per-request rendering, and it added an extra network round-trip to
-  // itself on every single page load. On serverless hosting that round
-  // trip can cold-start a second function invocation, and under load or
-  // any latency from the Google Sheets API, this was a plausible cause of
-  // intermittent failures/timeouts — which can show up as data (including
-  // photos) simply not appearing. There was no technical reason for the
-  // indirection here (unlike the blog's opengraph-image routes, which
-  // genuinely need it because they run on the Edge runtime, where the
-  // Node-only googleapis client can't run) — this route always ran on the
-  // Node runtime, so calling the data layer directly is safe and removes
-  // both problems.
+  // Calls the data layer directly (no self-referential HTTP fetch), which keeps
+  // this page eligible for ISR and avoids a Worker calling its own hostname.
   const DATA = await getPortfolioData();
 
   return (

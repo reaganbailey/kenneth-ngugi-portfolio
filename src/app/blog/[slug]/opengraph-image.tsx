@@ -1,10 +1,8 @@
  
 
 import { ImageResponse } from "next/og";
-import { getServerBlogPost } from "@/lib/server-blog";
-import { DATA } from "@/data/resume";
-
-export const runtime = "edge";
+import { getOgFonts, getAvatarDataUrl } from "@/lib/og-assets";
+import { getBlogPostBySlug } from "@/lib/blog";
 
 export const alt = "Blog Post";
 export const size = {
@@ -12,27 +10,6 @@ export const size = {
     height: 630,
 };
 export const contentType = "image/png";
-
-const getFontData = async () => {
-    try {
-        const cabinetGrotesk = await fetch(
-            new URL(
-                "../../../../public/fonts/CabinetGrotesk-Medium.ttf",
-                import.meta.url
-            )
-        ).then((res) => res.arrayBuffer());
-        const clashDisplay = await fetch(
-            new URL(
-                "../../../../public/fonts/ClashDisplay-Semibold.ttf",
-                import.meta.url
-            )
-        ).then((res) => res.arrayBuffer());
-        return { cabinetGrotesk, clashDisplay };
-    } catch (error) {
-        console.error("Failed to load fonts:", error);
-        return null;
-    }
-};
 
 const styles = {
     outerWrapper: {
@@ -125,12 +102,10 @@ export default async function Image({
     params: Promise<{ slug: string }>;
 }) {
     try {
-        const fontData = await getFontData();
+        const fontData = await getOgFonts();
         const { slug } = await params;
-        const post = await getServerBlogPost(slug);
-        const imageUrl = DATA.avatarUrl
-            ? new URL(DATA.avatarUrl, DATA.url).toString()
-            : undefined;
+        const post = await getBlogPostBySlug(slug);
+        const imageUrl = await getAvatarDataUrl();
 
         if (!post) {
             return new ImageResponse(

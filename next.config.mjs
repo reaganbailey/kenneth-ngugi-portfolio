@@ -1,4 +1,7 @@
-import { withContentCollections } from "@content-collections/next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+
+// Lets `next dev` use Cloudflare bindings (ASSETS etc.) from wrangler.jsonc.
+initOpenNextCloudflareForDev();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -30,5 +33,4 @@ const nextConfig = {
   },
 };
 
-// withContentCollections must be the outermost plugin
-export default withContentCollections(nextConfig);
+export default nextConfig;

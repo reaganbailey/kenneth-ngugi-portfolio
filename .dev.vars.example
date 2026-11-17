@@ -1,0 +1,4 @@
+# Copy to .dev.vars for `npm run preview` (and to .env.local for `npm run dev`).
+GOOGLE_SERVICE_ACCOUNT_EMAIL=your-service-account@your-project.iam.gserviceaccount.com
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+GOOGLE_SHEET_ID=your-sheet-id
